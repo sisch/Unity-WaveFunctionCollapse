@@ -10,37 +10,40 @@ public class Board : MonoBehaviour
 {
     /// <summary>
     /// Board that contains tiles and empty spaces
-    ///
-    /// TODO: Add allowedTypes for every tile as matrix
-    /// TODO: Remove allowedTypes from cell instead of determining cardinality as number
     /// </summary>
-    
-    public List<GameObject> availableTilePrefabs;
-    public Transform boardParent;
 
-    public int width = 3;
-    public int height = 3;
-    
-    public TileBehaviour[] tileBehaviours;
+    [SerializeField] private List<GameObject> availableTilePrefabs;
+    [SerializeField] private Transform boardParent;
 
-    public List<int> availableTilesIndices;
+    [SerializeField] private int width = 3;
+    [SerializeField] private int height = 3;
     
-    public List<ScriptableRule> rules;
+    private TileBehaviour[] _tileBehaviours;
+    private List<TileBehaviour.TileType>[] _allowedTypes;
+    [SerializeField] private  List<int> availableTilesIndices;
+    
+    [SerializeField] private  List<ScriptableRule> rules;
     
     public TileBehaviour GetTileAt(int x, int y)
     {
-        return tileBehaviours[x + y * width];
+        return _tileBehaviours[x + y * width];
     }
     
+    [SerializeField] private float interval = 3f;
+
+    private float _timer = 3f;
     public void SetTileAt(int x, int y, TileBehaviour tile)
     {
-        tileBehaviours[x + y * width] = tile;
+        _tileBehaviours[x + y * width] = tile;
         availableTilesIndices.Remove(x + y * width);
     }
     
     public void SpawnTile(int x, int y)
     {
-        var go = Instantiate(availableTilePrefabs.PickRandom(), boardParent);
+        LogTile(x+y*width);
+        var allowedPrefabs = availableTilePrefabs
+            .Where((prefab, index) => _allowedTypes[x+y*width].Contains(prefab.GetComponent<TileBehaviour>().tileType));
+        var go = Instantiate(allowedPrefabs.PickRandom(), boardParent);
         go.transform.localPosition = new Vector3(x, 0, y);
         var tile = go.GetComponent<TileBehaviour>();
         SetTileAt(x, y, tile);
@@ -54,7 +57,7 @@ public class Board : MonoBehaviour
         SpawnTile(x, y);
     }
 
-    public int DetermineCardinality(int index)
+    public void ConstrainTile(int index)
     {
         int x = index % width;
         int y = index / width;
@@ -92,13 +95,7 @@ public class Board : MonoBehaviour
             }
         }
 
-        var allowedTypes = new List<TileBehaviour.TileType>();
-        allowedTypes.Add(TileBehaviour.TileType.Empty);
-        allowedTypes.Add(TileBehaviour.TileType.North);
-        allowedTypes.Add(TileBehaviour.TileType.East);
-        allowedTypes.Add(TileBehaviour.TileType.South);
-        allowedTypes.Add(TileBehaviour.TileType.West);
-
+        var allowedTypes = _allowedTypes[index];
         foreach (var neighbour in neighbours)
         {
             var rule = rules.Find(r=>r.currentType == neighbour.Value.tileType);
@@ -108,35 +105,51 @@ public class Board : MonoBehaviour
                 allowedTypes = allowedTypes.Intersect(validNeighbours).ToList();
             }
         }
+        _allowedTypes[index] = allowedTypes;
+    }
 
-        return allowedTypes.Count;
+    int Cardinality(int index)
+    {
+        return _allowedTypes[index].Count;
     }
     
     // Start is called before the first frame update
     void Start()
     {
-        tileBehaviours = new TileBehaviour[width * height];
+        if(boardParent == null)
+            boardParent = GameObject.Find("Board")?.transform;
+        Init();
+    }
+
+    private void Init()
+    {
+        _tileBehaviours = new TileBehaviour[width * height];
+        _allowedTypes = new List<TileBehaviour.TileType>[width * height];
+        for (int i = 0; i < _allowedTypes.Length; i++)
+        {
+            // TODO: Fill from tile prefabs instead of hardcoding 
+            _allowedTypes[i] = new List<TileBehaviour.TileType>
+            {
+                TileBehaviour.TileType.Empty,
+                TileBehaviour.TileType.North,
+                TileBehaviour.TileType.East,
+                TileBehaviour.TileType.South,
+                TileBehaviour.TileType.West
+            };
+        }
+
         availableTilesIndices = new List<int>();
         for (int i = 0; i < width * height; i++)
         {
             availableTilesIndices.Add(i);
         }
-        
-        /*for (int i = 0; i < 5; i++)
-        {
-            SpawnTile();
-        }*/
-
     }
 
-    private float interval = 3f;
-
-    private float timer = 3f;
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer > interval)
+        _timer += Time.deltaTime;
+        if (_timer > interval)
         {
             if(availableTilesIndices.Count <= 0)
             {
@@ -146,7 +159,8 @@ public class Board : MonoBehaviour
             for (var index = 0; index < availableTilesIndices.Count; index++)
             {
                 var tilesIndex = availableTilesIndices[index];
-                var cardinality = DetermineCardinality(tilesIndex);
+                ConstrainTile(tilesIndex);
+                var cardinality = Cardinality(tilesIndex);
                 cardinalities[index] = new Tuple<int, int>(cardinality, tilesIndex);
             }
             // determine one or more smallest cardinalities
@@ -157,9 +171,15 @@ public class Board : MonoBehaviour
             var x = nextTile.Item2 % width;
             var y = nextTile.Item2 / width;
             Debug.Log($"Next tile is spawning at: {x}/{y}, because Cardinality is {nextTile.Item1}");
-            timer = 0f;
+            _timer = 0f;
             SpawnTile(x, y);
         }
-        
     }
+
+    void LogTile(int index)
+    {
+        Debug.Log($"Tile at {index} has following allowed types: \n" +
+                  $"{_allowedTypes[index].Select(t => t.ToString()).Aggregate((a, b) => a + ", " + b)}");
+    }
+    
 }
