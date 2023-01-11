@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b42494cfea61c214cb76dd75b5bc6510, type: 3}
-  m_Name: 003_RuleForEast
+  m_Name: 006_RuleForUpDown
   m_EditorClassIdentifier: 
-  currentType: 2
+  currentType: 6
   rule:
     rules:
     - direction: 0
-      validNeighbours: 020000000300000004000000
+      validNeighbours: 02000000030000000400000006000000
     - direction: 1
-      validNeighbours: 010000000300000004000000
+      validNeighbours: 000000000200000006000000
     - direction: 2
-      validNeighbours: 010000000200000004000000
+      validNeighbours: 01000000020000000400000006000000
     - direction: 3
-      validNeighbours: 0000000004000000
+      validNeighbours: 000000000400000006000000

@@ -7,10 +7,12 @@ public class TileBehaviour : MonoBehaviour
     public enum TileType
     {
         Empty,
-        North,
-        East,
-        South,
-        West,
+        UpLeftRight,
+        UpRightDown,
+        RightDownLeft,
+        DownLeftUp,
+        LeftRight,
+        UpDown,
     }
     
     public TileType tileType;

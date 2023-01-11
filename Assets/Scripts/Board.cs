@@ -123,19 +123,15 @@ public class Board : MonoBehaviour
 
     private void Init()
     {
+        var usedTileTypes = 
+            from prefab
+                in availableTilePrefabs 
+            select prefab.GetComponent<TileBehaviour>().tileType; 
         _tileBehaviours = new TileBehaviour[width * height];
         _allowedTypes = new List<TileBehaviour.TileType>[width * height];
         for (int i = 0; i < _allowedTypes.Length; i++)
         {
-            // TODO: Fill from tile prefabs instead of hardcoding 
-            _allowedTypes[i] = new List<TileBehaviour.TileType>
-            {
-                TileBehaviour.TileType.Empty,
-                TileBehaviour.TileType.North,
-                TileBehaviour.TileType.East,
-                TileBehaviour.TileType.South,
-                TileBehaviour.TileType.West
-            };
+            _allowedTypes[i] = new List<TileBehaviour.TileType>(usedTileTypes);
         }
 
         availableTilesIndices = new List<int>();

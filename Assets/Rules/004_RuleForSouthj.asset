@@ -16,10 +16,10 @@ MonoBehaviour:
   rule:
     rules:
     - direction: 0
-      validNeighbours: 0000000001000000
+      validNeighbours: 000000000100000005000000
     - direction: 1
-      validNeighbours: 010000000300000004000000
+      validNeighbours: 01000000030000000400000005000000
     - direction: 2
-      validNeighbours: 010000000200000004000000
+      validNeighbours: 01000000020000000400000006000000
     - direction: 3
-      validNeighbours: 010000000200000003000000
+      validNeighbours: 01000000020000000300000005000000

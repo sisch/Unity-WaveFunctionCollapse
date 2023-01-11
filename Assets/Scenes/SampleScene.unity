@@ -158,17 +158,21 @@ MonoBehaviour:
   - {fileID: 1131739599164201699, guid: f5f8a26ef0830ea45af643437a9e84c0, type: 3}
   - {fileID: 1342997869842986056, guid: 82a3427de198ce349a4077fe93f6cdb8, type: 3}
   - {fileID: 7678773763142896377, guid: 18efd84bb7e191e4880497172b65c90f, type: 3}
+  - {fileID: 7678773763142896377, guid: 24c1e982f6e0ac8499c86ca75410562e, type: 3}
+  - {fileID: 7678773763142896377, guid: ce8ae08f5e7ca2e499a87868de517947, type: 3}
   boardParent: {fileID: 1869103009}
-  width: 3
-  height: 3
-  tileBehaviours: []
+  width: 10
+  height: 10
   availableTilesIndices: 
   rules:
   - {fileID: 11400000, guid: 4c37f92a91e8eb64bad0bb825659f921, type: 2}
   - {fileID: 11400000, guid: 8a03c0c84c2ccee4285ccfaec41a483a, type: 2}
   - {fileID: 11400000, guid: 58375f506bd170e4d9eb007efc2cc991, type: 2}
   - {fileID: 11400000, guid: 4946538266085df43ac5c1336f715d12, type: 2}
+  - {fileID: 11400000, guid: 02704e850d4964b4bb09aedd2625a602, type: 2}
   - {fileID: 11400000, guid: 18fd9f6e8f6cfa94eb56ca007c850f06, type: 2}
+  - {fileID: 11400000, guid: b56ceb3092cb13c4bb3ab41f84801abe, type: 2}
+  interval: 0.1
 --- !u!4 &122627392
 Transform:
   m_ObjectHideFlags: 0
@@ -182,7 +186,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
@@ -452,13 +456,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699663008}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.01, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.5, y: -0.01, z: 4.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 1869103009}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1869103008
 GameObject:
@@ -470,7 +474,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1869103009}
   m_Layer: 0
-  m_Name: Boards
+  m_Name: Board
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -487,7 +491,8 @@ Transform:
   m_LocalPosition: {x: -4.5, y: 0, z: -4.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1699663012}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
